@@ -9,6 +9,10 @@ const ROTATION_TARGETS = [
   { repo: "rclone", workflow: "rotate-secrets.yml" },
 ];
 
+const BACKUP_TARGETS = [
+  { repo: "backup", workflow: "backup.yml" },
+];
+
 async function dispatch(env, repo, workflow) {
   const resp = await fetch(
     `https://api.github.com/repos/JYRAC/${repo}/actions/workflows/${workflow}/dispatches`,
@@ -29,12 +33,17 @@ async function dispatch(env, repo, workflow) {
 
 export default {
   async scheduled(event, env, ctx) {
-    if (event.cron === "0 0 * * 1") {
-      // 週次: ローテーション
-      for (const t of ROTATION_TARGETS) await dispatch(env, t.repo, t.workflow);
-    } else {
-      // それ以外(頻繁): watchdog
-      for (const t of WATCHDOG_TARGETS) await dispatch(env, t.repo, t.workflow);
+    let targets;
+    switch (event.cron) {
+      case "0 0 * * 1":
+        targets = ROTATION_TARGETS;
+        break;
+      case "0 18 * * *":
+        targets = BACKUP_TARGETS;
+        break;
+      default:
+        targets = WATCHDOG_TARGETS;
     }
+    for (const t of targets) await dispatch(env, t.repo, t.workflow);
   },
 };
