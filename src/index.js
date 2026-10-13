@@ -4,6 +4,7 @@ const WATCHDOG_TARGETS = [
   { repo: "directus", workflow: "watchdog.yml" },
   { repo: "rclone", workflow: "watchdog.yml" },
   { repo: "openbao", workflow: "watchdog.yml" },
+  { repo: "vaultwarden", workflow: "watchdog.yml" },
 ];
 
 const ROTATION_TARGETS = [
