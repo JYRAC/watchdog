@@ -9,6 +9,7 @@ const WATCHDOG_TARGETS = [
 
 const ROTATION_TARGETS = [
   { repo: "rclone", workflow: "rotate-secrets.yml" },
+  { repo: "casdoor", workflow: "sync-client-secrets.yml" },
 ];
 
 const BACKUP_TARGETS = [
